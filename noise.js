@@ -4,7 +4,8 @@ const random = require('canvas-sketch-util/random')
 const palettes = require('nice-color-palettes')
 
 const settings = {
-  dimensions: [ 2048, 2048 ]
+  dimensions: [ 2048, 2048 ],
+  animate: true
 };
 
 const palette = random.pick(palettes)
@@ -20,7 +21,6 @@ const createGrid = () => {
       points.push({
         position: [u,v],
         radius,
-        rotation: random.noise3D(u,v, 100),
         color: random.pick(palette),
       })
     }
@@ -31,7 +31,7 @@ const points = createGrid()
 const margin = 400
 
 const sketch = () => {
-  return ({ context, width, height }) => {
+  return ({ context, width, height, frame }) => {
     context.fillStyle = '#fefefe'
     context.fillRect(0, 0, width, height)
 
@@ -40,7 +40,6 @@ const sketch = () => {
         position,
         color,
         radius,
-        rotation
       } = data
 
       const [u,v] = position
@@ -48,15 +47,17 @@ const sketch = () => {
       const x = lerp(margin, width-margin, u)
       const y = lerp(margin, height-margin, v)
       
+      const randNoise = random.noise2D(x, y + frame * 10, 0.01)
+      const rotation = randNoise * Math.PI * 0.1
+      
       context.save()
       context.beginPath()
       context.arc(x, y, radius*width, 0, Math.PI*2)
-      // context.rect(x, y, radius*width, radius*height)
-      context.fillStyle = color
+      context.fillStyle = "black"
       context.translate(x,y)
       context.rotate(rotation)
-      context.font = `${radius * width}px "Arial"`
-      context.fillText('🙾',0,0)
+      context.font = `${(radius * width) + 50}px "Arial"`
+      context.fillText('⸅',0,0)
       context.restore()
     })
   };
