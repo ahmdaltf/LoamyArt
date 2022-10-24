@@ -13,6 +13,7 @@
     "canvas-sketch": "^0.7.6",
     "canvas-sketch-util": "^1.10.0",
     "nice-color-palettes": "^3.0.0",
-    "three": "^0.145.0"
+    "three": "^0.145.0",
+    "tweakpane": "^3.1.0"
   }
 }
